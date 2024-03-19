@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy WAR app to Azure Web App - ward
+name: Build and deploy JAR app to Azure Web App - ward
 
 on:
   push:
@@ -50,4 +50,4 @@ jobs:
           app-name: 'ward'
           slot-name: 'Production'
           package: '*.jar'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4EFC9275F5D644DBBAAD693E7CB81D52 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CB0F8E181F4247DB86B0060333F011EB }}

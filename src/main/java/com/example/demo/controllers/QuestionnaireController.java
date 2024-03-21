@@ -16,11 +16,18 @@ public class QuestionnaireController {
     private QuestionRepository questionRepository; // 假设你有一个QuestionRepository来从数据库中获取问题
 
     @GetMapping("/questionnaire")
-    public ModelAndView questionnaire(@RequestParam int type, int page, String scale) {
-        ModelAndView modelAndView = new ModelAndView("questionnaire");
+    public ModelAndView questionnaire(@RequestParam int group_type, int page, String scale) {
+
+        ModelAndView modelAndView;
+        if (page == 1) {
+            modelAndView = new ModelAndView("temp_page_first");
+        } else {
+            modelAndView = new ModelAndView("temp_page_others");
+        
+        }
 
         // 将type, page, scale添加到模型中
-        modelAndView.addObject("type", type);
+        modelAndView.addObject("group_type", group_type);
         modelAndView.addObject("page", page);
         modelAndView.addObject("scale", scale);
 

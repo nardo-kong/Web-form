@@ -4,12 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import java.util.List;
 
-@Entity(name = "questions")
-public class Question {
+@Entity(name = "options")
+public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,34 +16,21 @@ public class Question {
 
     private String text;
 
-    private String type;
-
-    private String scale;
-
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "question_id")
-    private List<Option> options;
+    private Question question;
 
     //getters and setters
-
     public Long getId() {
         return id;
     }
 
-    public String getText(){
+    public String getText() {
         return text;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public String getScale() {
-        return scale;
-    }
-
-    public List<Option> getOptions() {
-        return options;
+    public Question getQuestion() {
+        return question;
     }
 
 }

@@ -4,7 +4,7 @@
   <title>Page 1</title>
 </head>
 <body>
-  <div class="formbold-main-wrapper" th:style="'background-color:' + ${type == 0 ? 'blue' : 'red'}">
+  <div class="formbold-main-wrapper" th:style="'background-color:' + ${group_type == 0 ? 'blue' : 'red'}">
     <div class="formbold-form-wrapper">
   
       <!-- Form icon -->
@@ -112,30 +112,36 @@
         <div th:each="question : ${questions}">
           <div th:class="${question.type == 'select' ? 'formbold-input-radio-wrapper' : 'formbold-input-group'}">
             <label th:text="${question.text}" class="formbold-form-label"></label>
+
+            <!--text input-->
             <input 
               type="text"
               th:if="${question.type == 'text'}"
               th:name="${'answer' + question.id}"
               class="formbold-form-input"
             />
+            
+            <!--radio button-->
             <div 
               th:if="${question.type == 'select'}"
               th:attr="data-question-id=${question.id}"
-              class="formbold-form-select"
+              class="formbold-radio-flex"
             >
               <div 
                 th:each="option : ${question.options}"
-                class="formbold-form-option"
+                class="formbold-radio-group"
               >
-                <input 
+                <label th:text="${option.text}" class="formbold-radio-label">
+                  <input 
                   type="radio"
                   th:name="${'answer' + question.id}"
                   th:value="${option}"
-                  class="formbold-form-radio"
-                />
-                <label th:text="${option}" class="formbold-form-label"></label>
+                  class="formbold-input-radio"
+                  />
+                </label>
               </div>
             </div>
+            
           </div>
         </div>
 
@@ -212,7 +218,7 @@
   }
   .formbold-input-radio {
     position: absolute;
-    opacity: 0;
+    opacity: 1;
     cursor: pointer;
   }
   .formbold-radio-checkmark {

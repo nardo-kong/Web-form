@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -22,17 +23,17 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String accountId, Model model) {
+    public String login(@RequestParam String accountId, Model model, RedirectAttributes redirectAttributes) {
         User user = userRepository.findByAccountId(accountId);
         if (user != null ) {
             int lastDigit = Character.getNumericValue(accountId.charAt(accountId.length() - 1));
             if (lastDigit % 2 == 0) {
-                model.addAttribute("type", 0);
+                redirectAttributes.addAttribute("group_type", 0);
             } else {
-                model.addAttribute("type", 1);
+                redirectAttributes.addAttribute("group_type", 1);
             }
-            model.addAttribute("page", 1);
-            model.addAttribute("scale", "intertemporal choice");
+            redirectAttributes.addAttribute("page", 1);
+            redirectAttributes.addAttribute("scale", "intertemporal choice");
             return "redirect:/questionnaire";
         } else {
             model.addAttribute("error", "Invalid account");

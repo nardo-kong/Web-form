@@ -33,7 +33,7 @@ public class HomeController {
             }
             model.addAttribute("page", 1);
             model.addAttribute("scale", "intertemporal choice");
-            return "/Form";
+            return "redirect:/questionnaire";
         } else {
             model.addAttribute("error", "Invalid account");
             return "Home";

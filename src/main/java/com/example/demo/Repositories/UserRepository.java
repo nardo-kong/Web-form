@@ -1,8 +1,7 @@
 package com.example.demo.Repositories;
-import com.example.demo.Class.User;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.example.demo.Entities.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
     User findByAccountId(String accountId);

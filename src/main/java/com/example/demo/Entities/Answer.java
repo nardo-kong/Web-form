@@ -2,11 +2,13 @@ package com.example.demo.Entities;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "answers")
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long answerRecordId;
 
     @ManyToOne
     private User user;
@@ -29,4 +31,13 @@ public class Answer {
     public void setOption(Option option) {
         this.option = option;
     }
+
+    public void setAnswerRecordId(Long answerRecordId) {
+        this.answerRecordId = answerRecordId;
+    }
+
+    public Long getAnswerRecordId() {
+        return answerRecordId;
+    }
+
 }

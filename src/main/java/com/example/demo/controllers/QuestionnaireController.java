@@ -2,11 +2,14 @@ package com.example.demo.controllers;
 import com.example.demo.Repositories.QuestionRepository;
 import com.example.demo.Repositories.OptionRepository;
 import com.example.demo.Services.AnswerService;
+import com.example.demo.Services.AnswerRecordService;
 import com.example.demo.Entities.Answer;
 import com.example.demo.Entities.Question;
 import com.example.demo.Entities.Scale;
 import com.example.demo.Entities.User;
 import com.example.demo.Entities.Option;
+import com.example.demo.Entities.AnswerRecord;
+
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class QuestionnaireController {
     private QuestionRepository questionRepository;
     private OptionRepository optionRepository;
     private AnswerService answerService;
+    private AnswerRecordService answerRecordService;
 
     @GetMapping("/questionnaire")
     public ModelAndView questionnaire(@RequestParam int group_type, int page, String scale) {
@@ -54,23 +58,21 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/submit")
-    public String submitAnswers(HttpServletRequest request) {
-        // 获取用户的答案
-        User user = (User) request.getSession().getAttribute("user");
-        Scale scale = (Scale) request.getSession().getAttribute("scale");
-
-        Map<Question, Option> answers = new HashMap<>();
-
-        for (Question question : questionRepository.findByScale(scale.getTitle())) {
-            String optionId = request.getParameter("question_" + question.getId());
-            Option option = optionRepository.findById(Long.parseLong(optionId)).get();
-            answers.put(question, option);
+    public String submitAnswers(@RequestParam Map<Question, Option> answers, @RequestParam Long answerRecordId
+            , @RequestParam String group_type, @RequestParam int page, @RequestParam String scale) {
+        
+        AnswerRecord answerRecord = answerRecordService.findById(answerRecordId);
+        if (answerRecord == null) {
+            return "redirect:/error";
         }
 
-        answerService.saveAnswers(user, scale, answers);
+        for (Map.Entry<Question, Option> entry : answers.entrySet()) {
+            Question question = entry.getKey();
+            Option option = entry.getValue();
+            answerService.saveAnswers(answerRecord, question, option);
+        }
 
-        String group_type = request.getParameter("group_type");
-        int page = Integer.parseInt(request.getParameter("page"));
+        answerService.completeAnswerRecord(answerRecord);
 
         // 重定向到下一页
         return "redirect:/questionnaire?group_type=" + group_type + "&page=" + (page + 1) + "&scale=" + scale;

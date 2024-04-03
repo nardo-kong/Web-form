@@ -13,7 +13,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String text;
 
@@ -27,7 +27,7 @@ public class Question {
 
     //getters and setters
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 

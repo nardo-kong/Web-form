@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity(name = "answer_records")
 public class AnswerRecord {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

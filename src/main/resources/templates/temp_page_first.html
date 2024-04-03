@@ -139,7 +139,7 @@
                   <input
                     type="radio"
                     th:name="${'answer' + question.id}"
-                    th:value="${option}"
+                    th:value="${option.id}"
                     style="margin-right: 10px;"
                   />
                   <span th:text="${option.text}"></span>
@@ -150,6 +150,10 @@
           </div>
         </div>
 
+        <input type="hidden" name="group_type" th:value="${group_type}" />
+        <input type="hidden" name="page" th:value="${page}" />
+        <input type="hidden" name="scale" th:value="${scale}" />
+        <input type="hidden" name="answerRecordId" th:value="${answerRecordId}" />
         <button class="formbold-btn" type="submit">Submit</button>
       </form>
     </div>

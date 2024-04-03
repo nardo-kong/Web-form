@@ -34,6 +34,7 @@ public class HomeController {
             }
             redirectAttributes.addAttribute("page", 1);
             redirectAttributes.addAttribute("scale", "intertemporal choice");
+            redirectAttributes.addAttribute("accountId", accountId);
             return "redirect:/questionnaire";
         } else {
             model.addAttribute("error", "Invalid account");

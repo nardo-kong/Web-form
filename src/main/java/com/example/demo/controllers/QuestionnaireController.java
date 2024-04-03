@@ -30,12 +30,19 @@ public class QuestionnaireController {
 
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
     private OptionRepository optionRepository;
+    @Autowired
     private AnswerService answerService;
+    @Autowired
     private AnswerRecordService answerRecordService;
 
     @GetMapping("/questionnaire")
-    public ModelAndView questionnaire(@RequestParam int group_type, int page, String scale) {
+    public ModelAndView questionnaire(@RequestParam int group_type, int page, String scale, String accountId) {
+
+        // 创建AnswerRecord对象
+        AnswerRecord answerRecord = new AnswerRecord();
+        answerRecordService.saveAnswerRecord(answerRecord,scale,accountId);
 
         ModelAndView modelAndView;
         if (page == 1) {
@@ -49,6 +56,7 @@ public class QuestionnaireController {
         modelAndView.addObject("group_type", group_type);
         modelAndView.addObject("page", page);
         modelAndView.addObject("scale", scale);
+        modelAndView.addObject("answerRecordId", answerRecord.getId());
 
         // 从数据库中获取问题，然后添加到模型中
         List<Question> questions = questionRepository.findByScale(scale);
@@ -57,32 +65,44 @@ public class QuestionnaireController {
         return modelAndView;
     }
 
-    @PostMapping("/submit")
-    public String submitAnswers(@RequestParam Map<Question, Option> answers, @RequestParam Long answerRecordId
+    @PostMapping("/next_page")
+    public String submitAnswers(@RequestParam Map<String, String> answers, @RequestParam(required = false) Long answerRecordId
             , @RequestParam String group_type, @RequestParam int page, @RequestParam String scale) {
+        
+        // Remove non-answers parameters from the map
+        answers.remove("answerRecordId");
+        answers.remove("group_type");
+        answers.remove("page");
+        answers.remove("scale");
         
         AnswerRecord answerRecord = answerRecordService.findById(answerRecordId);
         if (answerRecord == null) {
             return "redirect:/error";
         }
 
-        for (Map.Entry<Question, Option> entry : answers.entrySet()) {
-            Question question = entry.getKey();
-            Option option = entry.getValue();
+        for (Map.Entry<String, String> entry : answers.entrySet()) {
+            String questionId = entry.getKey().replaceFirst("answer", "");
+            String optionId = entry.getValue();
+
+            Question question = questionRepository.findById(Integer.parseInt(questionId)).orElse(null);
+            Option option = optionRepository.findById(Long.parseLong(optionId)).orElse(null);
+
             answerService.saveAnswers(answerRecord, question, option);
         }
 
         answerService.completeAnswerRecord(answerRecord);
 
         // 重定向到下一页
-        return "redirect:/questionnaire?group_type=" + group_type + "&page=" + (page + 1) + "&scale=" + scale;
+        // return "redirect:/questionnaire?group_type=" + group_type + "&page=" + (page + 1) + "&scale=" + scale;
+        return "Home";
     }
 
+    /*
     @PostMapping("/next_page")
     public String postMethodName() {
         return "Home";
     }
-    
+    */
 
     
 }

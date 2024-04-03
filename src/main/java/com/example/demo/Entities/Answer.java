@@ -11,18 +11,12 @@ public class Answer {
     private Long answerRecordId;
 
     @ManyToOne
-    private User user;
-
-    @ManyToOne
     private Question question;
 
     @ManyToOne
     private Option option;
 
     // getters and setters
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public void setQuestion(Question question) {
         this.question = question;

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=0.8">
   <title>Page 1</title>
 </head>
 <body>
@@ -12,6 +13,7 @@
         <h1 class="formbold-form-header-title" th:text="${scale + ' test'}"></h1>
   
       <!-- Form icon -->
+      <!-- 
       <svg class="formbold-form-img" width="490" height="207" viewBox="0 0 490 207" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_1725_3865)">
       <path d="M149.501 1.92577C156.617 -1.09181 165.536 -0.759987 171.358 4.32828C163.082 5.78502 155.586 10.1262 150.199 16.5838C148.13 19.0817 146.089 22.0758 142.908 22.6953C140.928 23.0809 138.86 22.4173 137.17 21.3156C135.48 20.2137 134.105 18.7014 132.749 17.2063L132.277 17.0309C136.827 10.7766 142.386 4.94335 149.501 1.92577Z" fill="#F0F0F0"/>
@@ -110,6 +112,7 @@
       </clipPath>
       </defs>
       </svg>
+      -->
   
       <form action="/next_page" method="POST">
 
@@ -185,6 +188,19 @@
     padding: 40px;
     border-radius: 10px;
   }
+
+  /* Style for screen samller */
+  @media (max-width: 768px) {
+    .formbold-main-wrapper {
+      padding: 20px;
+    }
+
+    .formbold-form-wrapper {
+      padding: 20px;
+      max-width: 100%;
+    }
+  }
+
 
   .formbold-form-img {
     margin-bottom: 45px;
@@ -302,6 +318,13 @@
     color: white;
     cursor: pointer;
     margin-top: 25px;
+  }
+
+  /* Style for screen samller */
+  @media (max-width: 768px) {
+    .formbold-btn {
+      font-size: 24px;
+    }
   }
   .formbold-btn:hover {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);

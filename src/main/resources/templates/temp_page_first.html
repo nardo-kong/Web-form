@@ -149,6 +149,41 @@
                 </label>
               </div>
             </div>
+
+            <!-- likert-question -->
+            <div 
+              th:if="${question.type == 'likert5'}"
+              th:attr="data-question-id=${question.id}"
+              class="likert-container"
+            >
+              <div class="likert-options">
+                <div></div>
+                <div
+                  style="width: 90px; text-align: center;"
+                  th:text="${question.options[0].text}"></div>
+              </div>
+              <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                <label class="likert-options">
+                  <div th:text="${i}"></div>
+                  <input type="radio" th:name="${'answer' + question.id}" th:value="${i}">
+                </label>
+              </th:block>
+              <div class="likert-options">
+                <div></div>
+                <div 
+                  style="width: 90px; text-align: center;"
+                  th:text="${question.options[1].text}"></div>
+              </div>
+            </div>
+
+            <!-- Illustration -->
+            <div
+              th:if="${question.type == 'illustration'}"
+              th:attr="data-question-id=${question.id}"
+            >
+              <p th:text="${question.options[0].text}" class="text"></p>
+            </div>
+                
             
           </div>
         </div>
@@ -281,7 +316,7 @@
 
   .formbold-form-input {
     width: 100%;
-    padding: 13px 22px;
+    padding: 15px 22px;
     border-radius: 5px;
     border: 1px solid #dde3ec;
     background: #ffffff;
@@ -290,6 +325,7 @@
     color: #07074d;
     outline: none;
     resize: none;
+    margin-bottom: 10px;
   }
   .formbold-form-input::placeholder {
     color: #536387;
@@ -319,6 +355,47 @@
     cursor: pointer;
     margin-top: 25px;
   }
+
+  /* Style for likert question */
+  .likert-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+  }
+  div.likert-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50px;
+    justify-content: space-between;
+    margin-top: 10px;
+    color: #07074d;
+    font-size: 20px;
+  }
+  label.likert-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50px;
+    justify-content: space-between;
+    margin-top: 10px;
+    color: #07074d;
+    font-size: 25px;
+  }
+  label.likert-options input[type="radio"] {
+    transform: scale(1.5);
+  }
+  .illustration-container {
+    display: flex;
+  }
+  p.text {
+    font-size: 16px;
+    line-height: 24px;
+    color: #536387;
+    width: 80%;
+  }
+
 
   /* Style for screen samller */
   @media (max-width: 768px) {

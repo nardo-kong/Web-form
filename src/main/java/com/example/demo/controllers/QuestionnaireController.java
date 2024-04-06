@@ -13,16 +13,13 @@ import com.example.demo.Entities.AnswerRecord;
 
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
@@ -42,6 +39,7 @@ public class QuestionnaireController {
 
         // 创建AnswerRecord对象
         AnswerRecord answerRecord = new AnswerRecord();
+        answerRecord.setStartTimestamp(new Date());
         answerRecordService.saveAnswerRecord(answerRecord,scale,accountId);
 
         ModelAndView modelAndView;
@@ -82,12 +80,11 @@ public class QuestionnaireController {
 
         for (Map.Entry<String, String> entry : answers.entrySet()) {
             String questionId = entry.getKey().replaceFirst("answer", "");
-            String optionId = entry.getValue();
+            String answerContent = entry.getValue();
 
             Question question = questionRepository.findById(Integer.parseInt(questionId)).orElse(null);
-            Option option = optionRepository.findById(Long.parseLong(optionId)).orElse(null);
 
-            answerService.saveAnswers(answerRecord, question, option);
+            answerService.saveAnswers(answerRecord, question, answerContent);
         }
 
         answerService.completeAnswerRecord(answerRecord);

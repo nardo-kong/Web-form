@@ -1,5 +1,7 @@
 package com.example.demo.Entities;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity(name = "answer_records")
@@ -15,6 +17,10 @@ public class AnswerRecord {
     private Scale scale;
 
     private boolean completed;
+
+    private Date startTimestamp;
+
+    private Date finishTimestamp;
 
     // Other fields...
 
@@ -49,5 +55,13 @@ public class AnswerRecord {
 
     public boolean isCompleted() {
         return completed;
+    }
+
+    public void setStartTimestamp(Date startTimestamp) {
+        this.startTimestamp = startTimestamp;
+    }
+
+    public void setFinishTimestamp(Date finishTimestamp) {
+        this.finishTimestamp = finishTimestamp;
     }
 }

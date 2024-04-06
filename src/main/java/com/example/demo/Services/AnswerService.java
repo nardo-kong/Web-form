@@ -3,13 +3,13 @@ import com.example.demo.Daos.AnswerDao;
 import com.example.demo.Daos.AnswerRecordDao;
 import com.example.demo.Entities.Answer;
 import com.example.demo.Entities.AnswerRecord;
-import com.example.demo.Entities.Option;
 import com.example.demo.Entities.Question;
 import com.example.demo.Entities.User;
 import com.example.demo.Entities.Scale;
 
 import org.springframework.stereotype.Service;
-import java.util.Map;
+
+import java.util.Date;
 
 import javax.transaction.Transactional;
 
@@ -39,11 +39,11 @@ public class AnswerService {
     }
 
     @Transactional
-    public void saveAnswers(AnswerRecord answerRecord, Question question, Option option) {
+    public void saveAnswers(AnswerRecord answerRecord, Question question, String answerContent) {
         Answer answer = new Answer();
         answer.setAnswerRecordId(answerRecord.getId());
         answer.setQuestion(question);
-        answer.setOption(option);
+        answer.setAnswerContent(answerContent);
         answerDao.save(answer);
         
     }
@@ -52,5 +52,6 @@ public class AnswerService {
     public void completeAnswerRecord(AnswerRecord answerRecord) {
         answerRecord.setCompleted(true);
         answerRecordDao.save(answerRecord);
+        answerRecord.setFinishTimestamp(new Date());
     }
 }

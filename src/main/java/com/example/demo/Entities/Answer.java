@@ -13,8 +13,7 @@ public class Answer {
     @ManyToOne
     private Question question;
 
-    @ManyToOne
-    private Option option;
+    private String answerContent;
 
     // getters and setters
 
@@ -22,8 +21,8 @@ public class Answer {
         this.question = question;
     }
 
-    public void setOption(Option option) {
-        this.option = option;
+    public void setAnswerContent(String answerContent) {
+        this.answerContent = answerContent;
     }
 
     public void setAnswerRecordId(Long answerRecordId) {

@@ -33,7 +33,7 @@ public class HomeController {
                 redirectAttributes.addAttribute("group_type", 1);
             }
             redirectAttributes.addAttribute("page", 1);
-            redirectAttributes.addAttribute("scale", "intertemporal choice");
+            redirectAttributes.addAttribute("scale", "Example");
             redirectAttributes.addAttribute("accountId", accountId);
             return "redirect:/questionnaire";
         } else {

@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 import com.example.demo.Repositories.QuestionRepository;
+import com.example.demo.Repositories.ScaleRepository;
 import com.example.demo.Repositories.OptionRepository;
 import com.example.demo.Services.AnswerService;
 import com.example.demo.Services.AnswerRecordService;
@@ -33,6 +34,8 @@ public class QuestionnaireController {
     private AnswerService answerService;
     @Autowired
     private AnswerRecordService answerRecordService;
+    @Autowired
+    private ScaleRepository ScaleRepository;
 
     @GetMapping("/questionnaire")
     public ModelAndView questionnaire(@RequestParam int group_type, int page, String scale, String accountId) {
@@ -46,18 +49,21 @@ public class QuestionnaireController {
         if (page == 1) {
             modelAndView = new ModelAndView("temp_page_first");
         } else {
-            modelAndView = new ModelAndView("temp_page_others");
+            modelAndView = new ModelAndView("temp_page_first");
         
         }
 
         // 将type, page, scale添加到模型中
+        int totalPage = ScaleRepository.findByTitle(scale).getTotalPage();
         modelAndView.addObject("group_type", group_type);
         modelAndView.addObject("page", page);
+        modelAndView.addObject("totalPage", totalPage);
         modelAndView.addObject("scale", scale);
         modelAndView.addObject("answerRecordId", answerRecord.getId());
+        modelAndView.addObject("accountId", accountId);
 
         // 从数据库中获取问题，然后添加到模型中
-        List<Question> questions = questionRepository.findByScale(scale);
+        List<Question> questions = questionRepository.findByScaleAndPage(scale, page);
         modelAndView.addObject("questions", questions);
 
         return modelAndView;
@@ -65,13 +71,15 @@ public class QuestionnaireController {
 
     @PostMapping("/next_page")
     public String submitAnswers(@RequestParam Map<String, String> answers, @RequestParam(required = false) Long answerRecordId
-            , @RequestParam String group_type, @RequestParam int page, @RequestParam String scale) {
+            , @RequestParam String group_type, @RequestParam int page, @RequestParam String scale, @RequestParam String accountId) {
         
         // Remove non-answers parameters from the map
         answers.remove("answerRecordId");
         answers.remove("group_type");
         answers.remove("page");
+        answers.remove("totalPage");
         answers.remove("scale");
+        answers.remove("accountId");
         
         AnswerRecord answerRecord = answerRecordService.findById(answerRecordId);
         if (answerRecord == null) {
@@ -90,8 +98,14 @@ public class QuestionnaireController {
         answerService.completeAnswerRecord(answerRecord);
 
         // 重定向到下一页
-        // return "redirect:/questionnaire?group_type=" + group_type + "&page=" + (page + 1) + "&scale=" + scale;
-        return "Home";
+        int totalPage = ScaleRepository.findByTitle(scale).getTotalPage();
+        if (page == totalPage) {
+            return "Home";
+        } else {
+            return "redirect:/questionnaire?group_type=" + group_type + "&page=" + (page + 1) + "&scale=" + scale + "&accountId=" + accountId;
+        }
+        
+
     }
 
     /*

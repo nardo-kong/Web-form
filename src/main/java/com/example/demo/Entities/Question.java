@@ -25,6 +25,8 @@ public class Question {
     @JoinColumn(name = "question_id")
     private List<Option> options;
 
+    private int page;
+
     //getters and setters
 
     public int getId() {
@@ -45,6 +47,10 @@ public class Question {
 
     public List<Option> getOptions() {
         return options;
+    }
+
+    public int getPage() {
+        return page;
     }
 
 }

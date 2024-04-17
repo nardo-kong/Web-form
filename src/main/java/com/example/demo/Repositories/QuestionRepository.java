@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
     List<Question> findByScale(String scale);
+    List<Question> findByScaleAndPage(String scale, int page);
+    
 }

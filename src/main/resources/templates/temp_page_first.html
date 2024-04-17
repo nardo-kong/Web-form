@@ -126,6 +126,7 @@
               th:if="${question.type == 'text'}"
               th:name="${'answer' + question.id}"
               class="formbold-form-input"
+              required
             />
             
             <!--radio button-->
@@ -144,6 +145,7 @@
                     th:name="${'answer' + question.id}"
                     th:value="${option.id}"
                     style="margin-right: 10px;"
+                    required
                   />
                   <span th:text="${option.text}"></span>
                 </label>
@@ -165,7 +167,7 @@
               <th:block th:each="i : ${#numbers.sequence(1, 5)}">
                 <label class="likert-options">
                   <div th:text="${i}"></div>
-                  <input type="radio" th:name="${'answer' + question.id}" th:value="${i}">
+                  <input type="radio" th:name="${'answer' + question.id}" th:value="${i}" required>
                 </label>
               </th:block>
               <div class="likert-options">
@@ -192,7 +194,12 @@
         <input type="hidden" name="page" th:value="${page}" />
         <input type="hidden" name="scale" th:value="${scale}" />
         <input type="hidden" name="answerRecordId" th:value="${answerRecordId}" />
-        <button class="formbold-btn" type="submit">Submit</button>
+        <input type="hidden" name="totalPage" th:value="${totalPage}" />
+        <input type="hidden" name="accountId" th:value="${accountId}" />
+        <button class="formbold-btn" type="submit">
+          <span th:if="${page == totalPage}">Submit</span>
+          <span th:if="${page != totalPage}">Next Page</span>
+        </button>
       </form>
     </div>
   </div>

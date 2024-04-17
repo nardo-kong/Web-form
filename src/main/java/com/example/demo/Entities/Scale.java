@@ -11,6 +11,8 @@ public class Scale {
 
     private String title;
 
+    private int totalPage;
+
     @OneToMany(mappedBy = "scale")
     private List<Question> questions;
 
@@ -21,5 +23,9 @@ public class Scale {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
     }
 }

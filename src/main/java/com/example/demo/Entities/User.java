@@ -8,6 +8,8 @@ public class User {
     @Id
     private String accountId;
 
+    private String scale;
+
     public User() {
     }
 
@@ -21,5 +23,9 @@ public class User {
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
+    }
+
+    public String getScale() {
+        return scale;
     }
 }

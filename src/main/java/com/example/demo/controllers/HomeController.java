@@ -1,4 +1,5 @@
 package com.example.demo.controllers;
+import com.example.demo.Entities.Scale;
 import com.example.demo.Entities.User;
 import com.example.demo.Repositories.UserRepository;
 
@@ -33,7 +34,9 @@ public class HomeController {
                 redirectAttributes.addAttribute("group_type", 1);
             }
             redirectAttributes.addAttribute("page", 1);
-            redirectAttributes.addAttribute("scale", "Example");
+
+            String scale = user.getScale();
+            redirectAttributes.addAttribute("scale", scale);
             redirectAttributes.addAttribute("accountId", accountId);
             return "redirect:/questionnaire";
         } else {

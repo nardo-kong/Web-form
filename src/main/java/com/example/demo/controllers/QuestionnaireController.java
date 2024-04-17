@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -29,8 +30,6 @@ public class QuestionnaireController {
     @Autowired
     private QuestionRepository questionRepository;
     @Autowired
-    private OptionRepository optionRepository;
-    @Autowired
     private AnswerService answerService;
     @Autowired
     private AnswerRecordService answerRecordService;
@@ -38,20 +37,10 @@ public class QuestionnaireController {
     private ScaleRepository ScaleRepository;
 
     @GetMapping("/questionnaire")
-    public ModelAndView questionnaire(@RequestParam int group_type, int page, String scale, String accountId) {
-
-        // 创建AnswerRecord对象
-        AnswerRecord answerRecord = new AnswerRecord();
-        answerRecord.setStartTimestamp(new Date());
-        answerRecordService.saveAnswerRecord(answerRecord,scale,accountId);
+    public ModelAndView questionnaire(@RequestParam int group_type, int page, String scale, String accountId, @RequestParam AnswerRecord answerRecord) {
 
         ModelAndView modelAndView;
-        if (page == 1) {
-            modelAndView = new ModelAndView("temp_page_first");
-        } else {
-            modelAndView = new ModelAndView("temp_page_first");
-        
-        }
+        modelAndView = new ModelAndView("temp_page_first");
 
         // 将type, page, scale添加到模型中
         int totalPage = ScaleRepository.findByTitle(scale).getTotalPage();
@@ -70,8 +59,9 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/next_page")
-    public String submitAnswers(@RequestParam Map<String, String> answers, @RequestParam(required = false) Long answerRecordId
-            , @RequestParam String group_type, @RequestParam int page, @RequestParam String scale, @RequestParam String accountId) {
+    public String submitAnswers(@RequestParam Map<String, String> answers, @RequestParam(required = true) Long answerRecordId
+            , @RequestParam String group_type, @RequestParam int page, @RequestParam String scale
+            , @RequestParam String accountId, RedirectAttributes redirectAttributes) {
         
         // Remove non-answers parameters from the map
         answers.remove("answerRecordId");
@@ -102,7 +92,12 @@ public class QuestionnaireController {
         if (page == totalPage) {
             return "Home";
         } else {
-            return "redirect:/questionnaire?group_type=" + group_type + "&page=" + (page + 1) + "&scale=" + scale + "&accountId=" + accountId;
+            redirectAttributes.addAttribute("page", page + 1);
+            redirectAttributes.addAttribute("group_type", group_type);
+            redirectAttributes.addAttribute("scale", scale);
+            redirectAttributes.addAttribute("accountId", accountId);
+            redirectAttributes.addAttribute("answerRecord", answerRecord);
+            return "redirect:/questionnaire";
         }
         
 

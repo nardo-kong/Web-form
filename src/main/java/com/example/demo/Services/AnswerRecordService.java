@@ -35,6 +35,11 @@ public class AnswerRecordService {
         return savedAnswerRecord;
     }
 
+    public AnswerRecord savePage(AnswerRecord answerRecord, int page) {
+        answerRecord.setCurrentpage(page);
+        return answerRecordDao.save(answerRecord);
+    }
+
     public void completeAnswerRecord(AnswerRecord answerRecord) {
         answerRecord.setCompleted(true);
         answerRecordDao.save(answerRecord);

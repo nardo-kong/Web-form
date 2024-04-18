@@ -18,6 +18,8 @@ public class AnswerRecord {
 
     private boolean completed;
 
+    private int currentpage;
+
     private Date startTimestamp;
 
     private Date finishTimestamp;
@@ -55,6 +57,14 @@ public class AnswerRecord {
 
     public boolean isCompleted() {
         return completed;
+    }
+
+    public void setCurrentpage(int currentpage) {
+        this.currentpage = currentpage;
+    }
+
+    public int getCurrentpage() {
+        return currentpage;
     }
 
     public void setStartTimestamp(Date startTimestamp) {

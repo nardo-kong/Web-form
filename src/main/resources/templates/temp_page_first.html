@@ -5,6 +5,16 @@
   <title>Page 1</title>
 </head>
 <body>
+
+  <!-- error -->
+  <input type="hidden" id="error" th:value="${error}"/>
+  <script>
+    const error = document.getElementById('error').value;
+    if (error) {
+      alert(error);
+    }
+  </script>
+  
   <div class="formbold-main-wrapper" th:style="'background-color:' + ${group_type == 0 ? 'blue' : 'red'}">
     
     <div class="formbold-form-wrapper">
@@ -143,7 +153,7 @@
                   <input
                     type="radio"
                     th:name="${'answer' + question.id}"
-                    th:value="${option.id}"
+                    th:value="${option.text}"
                     style="margin-right: 10px;"
                     required
                   />

@@ -25,8 +25,7 @@ public class AnswerRecordService {
         return answerRecordDao.findById(id).orElse(null);
     }
 
-    public AnswerRecord saveAnswerRecord(AnswerRecord answerRecord, String scaleTitle, String accountId) {
-        Scale scale = scaleRepository.findByTitle(scaleTitle);
+    public AnswerRecord saveAnswerRecord(AnswerRecord answerRecord, Scale scale, String accountId) {
         answerRecord.setScale(scale);
         User user = userRepository.findByAccountId(accountId);
         answerRecord.setUser(user);

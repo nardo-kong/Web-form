@@ -8,7 +8,7 @@ public class User {
     @Id
     private String accountId;
 
-    private String scale;
+    private Long scaleId;
 
     public User() {
     }
@@ -25,7 +25,7 @@ public class User {
         this.accountId = accountId;
     }
 
-    public String getScale() {
-        return scale;
+    public Long getScaleId() {
+        return scaleId;
     }
 }

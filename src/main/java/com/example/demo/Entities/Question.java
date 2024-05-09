@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -19,7 +20,9 @@ public class Question {
 
     private String type;
 
-    private String scale;
+    @ManyToOne
+    @JoinColumn(name = "scale_id")
+    private Scale scale;
 
     @OneToMany
     @JoinColumn(name = "question_id")
@@ -41,7 +44,7 @@ public class Question {
         return type;
     }
 
-    public String getScale() {
+    public Scale getScale() {
         return scale;
     }
 

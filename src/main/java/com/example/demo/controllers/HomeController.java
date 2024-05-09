@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.Entities.AnswerRecord;
 import com.example.demo.Entities.Scale;
 import com.example.demo.Entities.User;
+import com.example.demo.Repositories.ScaleRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.AnswerRecordService;
 
@@ -23,6 +24,8 @@ public class HomeController {
     private UserRepository userRepository;
     @Autowired
     private AnswerRecordService answerRecordService;
+    @Autowired
+    private ScaleRepository scaleRepository;
 
     @GetMapping("/")
     public String home() {
@@ -44,7 +47,8 @@ public class HomeController {
             }
 
             // 选择Scale
-            String scale = user.getScale();
+            Long scaleId = user.getScaleId();
+            Scale scale = scaleRepository.findById(scaleId).orElse(null);
 
             // 创建AnswerRecord对象
             AnswerRecord answerRecord = new AnswerRecord();
@@ -54,7 +58,7 @@ public class HomeController {
             // 添加重定向属性
             redirectAttributes.addAttribute("page", 1);
             redirectAttributes.addAttribute("group_type", groupType);
-            redirectAttributes.addAttribute("scale", scale);
+            redirectAttributes.addAttribute("scaleId", scaleId);
             redirectAttributes.addAttribute("accountId", accountId);
             redirectAttributes.addAttribute("answerRecord", answerRecord);
 

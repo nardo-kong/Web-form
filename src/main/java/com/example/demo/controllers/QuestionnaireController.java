@@ -38,14 +38,16 @@ public class QuestionnaireController {
 
     @GetMapping("/questionnaire")
     public ModelAndView questionnaire(@RequestParam int group_type, int page
-    , String scale, @RequestParam(required = true) String accountId
+    , Long scaleId, @RequestParam(required = true) String accountId
     , @RequestParam(required = true) AnswerRecord answerRecord, String error) {
 
         ModelAndView modelAndView = new ModelAndView("temp_page_first");
 
         // Add type, page, scale to the model
-        int totalPage = ScaleRepository.findByTitle(scale).getTotalPage();
-        addModelAttributes(modelAndView, group_type, page, totalPage, scale, accountId, answerRecord, error);
+        System.out.println("scaleId" + scaleId);
+        Scale scale = ScaleRepository.findById(scaleId).orElse(null);
+        int totalPage = scale.getTotalPage();
+        addModelAttributes(modelAndView, group_type, page, totalPage, scaleId, accountId, answerRecord, error);
 
         // Get questions from the database and add to the model
         List<Question> questions = questionRepository.findByScaleAndPage(scale, page);
@@ -56,7 +58,7 @@ public class QuestionnaireController {
 
     @PostMapping("/next_page")
     public String submitAnswers(@RequestParam Map<String, String> answers, @RequestParam(required = true) Long answerRecordId
-            , @RequestParam String group_type, @RequestParam int page, @RequestParam String scale
+            , @RequestParam String group_type, @RequestParam int page, @RequestParam Long scaleId
             , @RequestParam String accountId, RedirectAttributes redirectAttributes) {
 
 
@@ -71,7 +73,7 @@ public class QuestionnaireController {
         int savedPage = answerRecord.getCurrentpage();
         if (savedPage != page - 1) {
             String error = savedPage > page - 1 ? "You have already completed this page." : "Please complete the previous page first.";
-            addRedirectAttributes(redirectAttributes, savedPage + 1, group_type, scale, accountId, answerRecord, error);
+            addRedirectAttributes(redirectAttributes, savedPage + 1, group_type, scaleId, accountId, answerRecord, error);
             return "redirect:/questionnaire";
         }
         
@@ -94,12 +96,13 @@ public class QuestionnaireController {
         
 
         // Redirect to the next page
-        int totalPage = ScaleRepository.findByTitle(scale).getTotalPage();
+        Scale scale = ScaleRepository.findById(scaleId).orElse(null);
+        int totalPage = scale.getTotalPage();
         if (page == totalPage) {
             answerService.completeAnswerRecord(answerRecord);
             return "Home";
         } else {
-            addRedirectAttributes(redirectAttributes, page + 1, group_type, scale, accountId, answerRecord, null);
+            addRedirectAttributes(redirectAttributes, page + 1, group_type, scaleId, accountId, answerRecord, null);
             return "redirect:/questionnaire";
         }
         
@@ -107,11 +110,13 @@ public class QuestionnaireController {
     }
 
     // Some method
-    private void addModelAttributes(ModelAndView modelAndView, int group_type, int page, int totalPage, String scale, String accountId, AnswerRecord answerRecord, String error) {
+    private void addModelAttributes(ModelAndView modelAndView, int group_type, int page, int totalPage, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
+        String scaleName = ScaleRepository.findById(scaleId).orElse(null).getTitle();
         modelAndView.addObject("group_type", group_type);
         modelAndView.addObject("page", page);
         modelAndView.addObject("totalPage", totalPage);
-        modelAndView.addObject("scale", scale);
+        modelAndView.addObject("scaleId", scaleId);
+        modelAndView.addObject("scale", scaleName);
         modelAndView.addObject("answerRecordId", answerRecord.getId());
         modelAndView.addObject("accountId", accountId);
         if (error != null) {
@@ -119,10 +124,12 @@ public class QuestionnaireController {
         }
     }
 
-    private void addRedirectAttributes(RedirectAttributes redirectAttributes, int page, String group_type, String scale, String accountId, AnswerRecord answerRecord, String error) {
+    private void addRedirectAttributes(RedirectAttributes redirectAttributes, int page, String group_type, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
+        String scaleName = ScaleRepository.findById(scaleId).orElse(null).getTitle();
         redirectAttributes.addAttribute("page", page);
         redirectAttributes.addAttribute("group_type", group_type);
-        redirectAttributes.addAttribute("scale", scale);
+        redirectAttributes.addAttribute("scaleId", scaleId);
+        redirectAttributes.addAttribute("scale", scaleName);
         redirectAttributes.addAttribute("accountId", accountId);
         redirectAttributes.addAttribute("answerRecord", answerRecord);
         if (error != null) {
@@ -135,7 +142,7 @@ public class QuestionnaireController {
         answers.remove("group_type");
         answers.remove("page");
         answers.remove("totalPage");
-        answers.remove("scale");
+        answers.remove("scaleId");
         answers.remove("accountId");
     }
 

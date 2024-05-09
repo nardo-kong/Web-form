@@ -44,7 +44,6 @@ public class QuestionnaireController {
         ModelAndView modelAndView = new ModelAndView("temp_page_first");
 
         // Add type, page, scale to the model
-        System.out.println("scaleId" + scaleId);
         Scale scale = ScaleRepository.findById(scaleId).orElse(null);
         int totalPage = scale.getTotalPage();
         addModelAttributes(modelAndView, group_type, page, totalPage, scaleId, accountId, answerRecord, error);

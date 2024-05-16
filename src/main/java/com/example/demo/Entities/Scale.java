@@ -1,6 +1,8 @@
 package com.example.demo.Entities;
 
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity(name = "scales")
@@ -12,6 +14,14 @@ public class Scale {
     private String title;
 
     private int totalPage;
+
+    private boolean isDeleted;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime expiryDate;
+
+    private Long previousId;
 
     @OneToMany(mappedBy = "scale")
     private List<Question> questions;
@@ -28,4 +38,21 @@ public class Scale {
     public int getTotalPage() {
         return totalPage;
     }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
+    }
+
+    public Long getPreviousId() {
+        return previousId;
+    }
+    
 }

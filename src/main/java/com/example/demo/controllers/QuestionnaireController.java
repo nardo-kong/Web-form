@@ -34,7 +34,7 @@ public class QuestionnaireController {
     @Autowired
     private AnswerRecordService answerRecordService;
     @Autowired
-    private ScaleRepository ScaleRepository;
+    private ScaleRepository scaleRepository;
 
     @GetMapping("/questionnaire")
     public ModelAndView questionnaire(@RequestParam int group_type, int page
@@ -44,7 +44,7 @@ public class QuestionnaireController {
         ModelAndView modelAndView = new ModelAndView("temp_page_first");
 
         // Add type, page, scale to the model
-        Scale scale = ScaleRepository.findById(scaleId).orElse(null);
+        Scale scale = scaleRepository.findById(scaleId).orElse(null);
         int totalPage = scale.getTotalPage();
         addModelAttributes(modelAndView, group_type, page, totalPage, scaleId, accountId, answerRecord, error);
 
@@ -95,7 +95,7 @@ public class QuestionnaireController {
         
 
         // Redirect to the next page
-        Scale scale = ScaleRepository.findById(scaleId).orElse(null);
+        Scale scale = scaleRepository.findById(scaleId).orElse(null);
         int totalPage = scale.getTotalPage();
         if (page == totalPage) {
             answerService.completeAnswerRecord(answerRecord);
@@ -110,7 +110,7 @@ public class QuestionnaireController {
 
     // Some method
     private void addModelAttributes(ModelAndView modelAndView, int group_type, int page, int totalPage, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
-        String scaleName = ScaleRepository.findById(scaleId).orElse(null).getTitle();
+        String scaleName = scaleRepository.findById(scaleId).orElse(null).getTitle();
         modelAndView.addObject("group_type", group_type);
         modelAndView.addObject("page", page);
         modelAndView.addObject("totalPage", totalPage);
@@ -124,7 +124,7 @@ public class QuestionnaireController {
     }
 
     private void addRedirectAttributes(RedirectAttributes redirectAttributes, int page, String group_type, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
-        String scaleName = ScaleRepository.findById(scaleId).orElse(null).getTitle();
+        String scaleName = scaleRepository.findById(scaleId).orElse(null).getTitle();
         redirectAttributes.addAttribute("page", page);
         redirectAttributes.addAttribute("group_type", group_type);
         redirectAttributes.addAttribute("scaleId", scaleId);

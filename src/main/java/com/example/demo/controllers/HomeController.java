@@ -35,6 +35,7 @@ public class HomeController {
     @PostMapping("/login")
     public String login(@RequestParam String accountId, Model model, RedirectAttributes redirectAttributes) {
         User user = userRepository.findByAccountId(accountId);
+        String error = null;
 
         if (user != null ) {
 
@@ -49,6 +50,11 @@ public class HomeController {
             // 选择Scale
             Long scaleId = user.getScaleId();
             Scale scale = scaleRepository.findById(scaleId).orElse(null);
+            while (scale != null && scale.isDeleted()) {
+                scale = scaleRepository.findByPreviousId(scaleId);
+                scaleId = scale.getId();
+                error = "The previous questionnaire has been edited, redirected to the latest version.";
+            }
 
             // 创建AnswerRecord对象
             AnswerRecord answerRecord = new AnswerRecord();
@@ -61,6 +67,7 @@ public class HomeController {
             redirectAttributes.addAttribute("scaleId", scaleId);
             redirectAttributes.addAttribute("accountId", accountId);
             redirectAttributes.addAttribute("answerRecord", answerRecord);
+            redirectAttributes.addAttribute("error", error);
 
             return "redirect:/questionnaire";
 

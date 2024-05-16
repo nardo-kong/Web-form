@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface ScaleRepository extends JpaRepository<Scale, Long> {
     Scale findByTitle(String title);
     Optional<Scale> findById(Long id);
+    Scale findByPreviousId(Long previousId);
 }

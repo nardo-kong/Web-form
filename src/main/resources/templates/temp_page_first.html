@@ -124,7 +124,7 @@
       </svg>
       -->
   
-      <form action="/next_page" method="POST">
+      <form id="myForm" action="/next_page" method="POST">
 
         <div th:each="question : ${questions}">
           <div th:class="${question.type == 'select' ? 'formbold-input-radio-wrapper' : 'formbold-input-group'}">
@@ -206,9 +206,13 @@
         <input type="hidden" name="answerRecordId" th:value="${answerRecordId}" />
         <input type="hidden" name="totalPage" th:value="${totalPage}" />
         <input type="hidden" name="accountId" th:value="${accountId}" />
+        
         <button class="formbold-btn" type="submit">
-          <span th:if="${page == totalPage}">Submit</span>
-          <span th:if="${page != totalPage}">Next Page</span>
+          <span class="button-text" th:if="${page == totalPage}">Submit</span>
+          <span class="button-text" th:if="${page != totalPage}">Next Page</span>
+          <div class="loadingSpinner" style="display: none;">
+            <div class="spinner"></div>
+          </div>
         </button>
       </form>
     </div>
@@ -361,6 +365,9 @@
   }
 
   .formbold-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     width: 100%;
     font-size: 16px;
@@ -373,6 +380,7 @@
     cursor: pointer;
     margin-top: 25px;
   }
+  
 
   /* Style for likert question */
   .likert-container {
@@ -424,5 +432,38 @@
   .formbold-btn:hover {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
   }
+
+  .spinner {
+    width: 19px;
+    height: 19px;
+    position: relative;
+  }
+  
+  .spinner::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: #333;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
   
 </style>
+
+<script>
+  document.getElementById('myForm').addEventListener('submit', function(event) {
+    var button = this.querySelector('.formbold-btn');
+    var spinner = button.querySelector('.loadingSpinner');
+    var buttonText = button.querySelector('.button-text');
+    spinner.style.display = 'flex';
+    buttonText.style.display = 'none';
+  });
+</script>
+</html>

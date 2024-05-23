@@ -27,10 +27,23 @@
             type="text"
             name="accountId"
             id="accountId"
-            placeholder="Enter your test account"
+            placeholder="Please Enter Test Account"
             class="formbold-form-input"
           />
-  
+          
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password (Optional)"
+            class="formbold-form-input"
+          />
+          
+          <div class="formbold-form-links">
+            <a class="formbold-link" href="/create-account">Create Account</a>
+            <a class="formbold-link" href="/forgot-password">Forgot Password?</a>
+          </div>
+          
           <button class="formbold-btn">
             <span class="button-text">Start Now</span>
             <div class="loadingSpinner" style="display: none;">
@@ -95,6 +108,7 @@
       color: #536387;
       outline: none;
       resize: none;
+      margin-bottom: 20px;
     }
     .formbold-form-input:focus {
       border-color: #6a64f1;
@@ -115,7 +129,7 @@
       background-color: #6a64f1;
       color: white;
       cursor: pointer;
-      margin-top: 25px;
+      margin-top: 10px;
     }
     .formbold-btn:hover {
       box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
@@ -166,6 +180,22 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .formbold-form-links {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .formbold-link {
+      color: #6a64f1;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+    
+    .formbold-link:hover {
+      text-decoration: underline;
+    }
   
   </style>
   <script>
@@ -180,4 +210,3 @@
 
 </body>
 </html>
-```

@@ -32,12 +32,14 @@ public class HomeController {
     private ScaleRepository scaleRepository;
 
     @GetMapping("/")
-    public String home() {
+    public String home(@RequestParam Long scaleId, Model model) {
+        model.addAttribute("scaleId", scaleId);
         return "Home";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String accountId, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
+    public String login(@RequestParam String accountId, @RequestParam String password,
+                        @RequestParam Long scaleId, Model model, RedirectAttributes redirectAttributes) {
         User user = userRepository.findByAccountId(accountId);
         String error = null;
 
@@ -52,7 +54,9 @@ public class HomeController {
             }
 
             // 选择Scale
-            Long scaleId = user.getScaleId();
+            if (scaleId == null) {
+                scaleId = user.getScaleId();
+            }
             Scale scale = scaleRepository.findById(scaleId).orElse(null);
             while (scale != null && scale.isDeleted()) {
                 scale = scaleRepository.findByPreviousId(scaleId);

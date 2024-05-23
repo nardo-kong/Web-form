@@ -7,7 +7,11 @@ import com.example.demo.Repositories.ScaleRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.AnswerRecordService;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,11 +37,11 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String accountId, Model model, RedirectAttributes redirectAttributes) {
+    public String login(@RequestParam String accountId, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
         User user = userRepository.findByAccountId(accountId);
         String error = null;
 
-        if (user != null ) {
+        if (user != null && (user.getPassword() == null || user.getPassword().equals(hashPassword(password)))) {
 
             int lastDigit = Character.getNumericValue(accountId.charAt(accountId.length() - 1));
             int groupType;
@@ -72,9 +76,31 @@ public class HomeController {
             return "redirect:/questionnaire";
 
         } else {
-            model.addAttribute("error", "Invalid account");
+            model.addAttribute("error", "Invalid account or password");
             return "Home";
         }
+    }
+
+    public String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedhash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            return bytesToHex(encodedhash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString().toLowerCase();
     }
     
 }

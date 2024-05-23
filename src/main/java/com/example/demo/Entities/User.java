@@ -10,6 +10,8 @@ public class User {
 
     private Long scaleId;
 
+    private String password;
+
     public User() {
     }
 
@@ -27,5 +29,13 @@ public class User {
 
     public Long getScaleId() {
         return scaleId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

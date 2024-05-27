@@ -90,6 +90,27 @@ public class HomeController {
         }
     }
 
+    @GetMapping("/create-account")
+    public String createAccount() {
+        return "Registration";
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestParam String username,
+                           @RequestParam String identifier,
+                           @RequestParam String gender,
+                           @RequestParam String email,
+                           @RequestParam String organization,
+                           @RequestParam String state,
+                           @RequestParam String country,
+                           @RequestParam String post,
+                           @RequestParam String area) {
+        User user = new User();
+
+        return "RegistrationSuccess";
+    }
+
+
     public String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

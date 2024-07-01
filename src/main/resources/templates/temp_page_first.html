@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.8">
   <title th:text="'Page ' + ${page}"></title>
 </head>
-<body>
+<body th:style="'background-color:' + ${group_type == 0 ? 'blue' : 'red'}">
 
   <!-- error -->
   <input type="hidden" id="error" th:value="${error}"/>
@@ -16,13 +16,13 @@
     }
   </script>
   
-  <div class="formbold-main-wrapper" th:style="'background-color:' + ${group_type == 0 ? 'blue' : 'red'}">
+  <div class="formbold-main-wrapper" >
     
     <div class="formbold-form-wrapper">
 
       <div class="formbold-form-header">
         <h1 class="formbold-form-header-title" th:text="${#strings.capitalizeWords(scale)}"></h1>
-  
+
       <!-- Form icon -->
       <!-- 
       <svg class="formbold-form-img" width="490" height="207" viewBox="0 0 490 207" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,6 +124,7 @@
       </defs>
       </svg>
       -->
+      </div>
   
       <form id="myForm" action="/next_page" method="POST">
 
@@ -229,6 +230,7 @@
   }
   body {
     font-family: 'Inter', sans-serif;
+    min-height: 100vh;
   }
   .formbold-main-wrapper {
     display: flex;
@@ -244,18 +246,6 @@
     background: white;
     padding: 40px;
     border-radius: 10px;
-  }
-
-  /* Style for screen samller */
-  @media (max-width: 768px) {
-    .formbold-main-wrapper {
-      padding: 20px;
-    }
-
-    .formbold-form-wrapper {
-      padding: 20px;
-      max-width: 100%;
-    }
   }
 
 
@@ -423,20 +413,14 @@
     width: 80%;
   }
 
-
-  /* Style for screen samller */
-  @media (max-width: 768px) {
-    .formbold-btn {
-      font-size: 24px;
-    }
-  }
   .formbold-btn:hover {
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
   }
 
+  /* Spinner for submit button */
   .spinner {
-    width: 19px;
-    height: 19px;
+    width: 18.667px;
+    height: 18.667px;
     position: relative;
   }
   
@@ -455,6 +439,25 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  /* Style for screen samller */
+  @media (max-width: 768px) {
+    .formbold-main-wrapper {
+      padding: 20px;
+    }
+    .formbold-form-wrapper {
+      padding: 20px;
+      max-width: 100%;
+    }
+    .formbold-btn {
+      font-size: 24px;
+    }
+    .spinner {
+    width: 28px;
+    height: 28px;
+    position: relative;
+  }
+  }
   
 </style>
 
@@ -465,6 +468,18 @@
     var buttonText = button.querySelector('.button-text');
     spinner.style.display = 'flex';
     buttonText.style.display = 'none';
+  });
+
+  // 监听 pageshow 事件来处理浏览器的前进和后退操作
+  window.addEventListener('pageshow', function(event) {
+    var button = document.querySelector('.formbold-btn');
+    if (button) {
+      var spinner = button.querySelector('.loadingSpinner');
+      var buttonText = button.querySelector('.button-text');
+      // 重置按钮状态，显示文本，隐藏旋转圆圈
+      spinner.style.display = 'none';
+      buttonText.style.display = 'inline'; // 或者是 'block', 取决于你的布局
+    }
   });
 </script>
 </html>

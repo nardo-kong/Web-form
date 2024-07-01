@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 import com.example.demo.Repositories.QuestionRepository;
 import com.example.demo.Repositories.ScaleRepository;
-import com.example.demo.Repositories.OptionRepository;
 import com.example.demo.Services.AnswerService;
 import com.example.demo.Services.AnswerRecordService;
 import com.example.demo.Entities.Answer;

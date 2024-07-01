@@ -129,10 +129,10 @@
       <form id="myForm" action="/next_page" method="POST">
 
         <div th:each="question : ${questions}">
-          <div th:class="${question.type == 'select' ? 'formbold-input-radio-wrapper' : 'formbold-input-group'}">
+          <div class="formbold-input-group">
             <label th:text="${question.text}" class="formbold-form-label"></label>
 
-            <!--text input-->
+            <!-- Text question -->
             <input 
               type="text"
               th:if="${question.type == 'text'}"
@@ -141,7 +141,7 @@
               required
             />
             
-            <!--radio button-->
+            <!-- Multiple choice question -->
             <div 
               th:if="${question.type == 'select'}"
               th:attr="data-question-id=${question.id}"
@@ -164,7 +164,7 @@
               </div>
             </div>
 
-            <!-- likert-question -->
+            <!-- likert question -->
             <div 
               th:if="${question.type == 'likert5'}"
               th:attr="data-question-id=${question.id}"
@@ -254,7 +254,7 @@
   }
 
   .formbold-input-group {
-    margin-bottom: 18px;
+    margin-bottom: 25px;
   }
 
   .formbold-form-select {
@@ -269,9 +269,6 @@
     resize: none;
   }
 
-  .formbold-input-radio-wrapper {
-    margin-bottom: 25px;
-  }
   .formbold-radio-flex {
     display: flex;
     flex-direction: column;
@@ -417,13 +414,14 @@
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
   }
 
+
+
   /* Spinner for submit button */
   .spinner {
     width: 18.667px;
     height: 18.667px;
     position: relative;
   }
-  
   .spinner::before {
     content: '';
     display: block;
@@ -434,11 +432,11 @@
     border-top-color: #333;
     animation: spin 1s linear infinite;
   }
-  
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
 
   /* Style for screen samller */
   @media (max-width: 768px) {
@@ -482,4 +480,5 @@
     }
   });
 </script>
+
 </html>

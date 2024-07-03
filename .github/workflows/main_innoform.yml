@@ -59,4 +59,6 @@ jobs:
           app-name: 'InnoForm'
           slot-name: 'Production'
           package: '*.jar'
+          environment-variables: |
+            AZURE_BLOB_CONNECTION_STRING=${{ secrets.AZURE_BLOB_CONNECTION_STRING }}
           

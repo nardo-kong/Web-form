@@ -25,6 +25,7 @@ jobs:
         run: mvn clean install
         env:
           AZURE_BLOB_CONNECTION_STRING: ${{ secrets.AZURE_BLOB_CONNECTION_STRING }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3

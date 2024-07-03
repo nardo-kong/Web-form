@@ -30,6 +30,8 @@ public class Question {
 
     private int page;
 
+    private String imageUrl;
+
     //getters and setters
 
     public int getId() {
@@ -54,6 +56,10 @@ public class Question {
 
     public int getPage() {
         return page;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
 }

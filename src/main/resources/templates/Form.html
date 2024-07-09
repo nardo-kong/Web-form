@@ -85,7 +85,7 @@
       <path d="M45.9981 128.757C46.3979 128.516 46.7402 128.191 47.0008 127.803C47.2614 127.416 47.434 126.976 47.5065 126.514C47.5789 126.053 47.5495 125.581 47.4201 125.132C47.2908 124.684 47.0648 124.269 46.758 123.917L50.9046 82.25L43.9806 82.7101L42.0624 123.739C41.5062 124.294 41.1728 125.035 41.1253 125.82C41.0777 126.605 41.3194 127.38 41.8046 127.998C42.2897 128.617 42.9845 129.036 43.7574 129.175C44.5303 129.315 45.3276 129.166 45.9981 128.757V128.757Z" fill="#FFB8B8"/>
       <path d="M41.1755 80.7076L42.9909 94.5229L42.7388 102.99L50.3542 103.688L51.8805 96.646L52.7213 78.0022C52.7847 76.596 52.3135 75.218 51.4026 74.1459C50.4917 73.0738 49.2087 72.3873 47.8124 72.2247V72.2247C46.3637 72.0561 44.9069 72.4646 43.7563 73.362C42.6058 74.2594 41.8537 75.5739 41.6625 77.0216L41.1755 80.7076Z" fill="#2F2E41"/>
       <path d="M70.3394 202.266H74.9587L77.1561 184.424H70.3384L70.3394 202.266Z" fill="#FFB7B7"/>
-      <path d="M69.1609 200.756L78.2583 200.756H78.2587C79.7963 200.756 81.2708 201.368 82.3581 202.456C83.4453 203.545 84.0562 205.021 84.0563 206.561V206.75L69.1612 206.75L69.1609 200.756Z" fill="#2F2E41"/>
+      <path d="M69.1609 200.756L78.2583 200.756H78.2587C79.7963 200.756 81.2708 201.368 82.3581 202.456C83.4     margin: 10px 0 20px;021 84.0563 206.561V206.75L69.1612 206.75L69.1609 200.756Z" fill="#2F2E41"/>
       <path d="M32.1956 202.266H36.8149L39.0123 184.424H32.1946L32.1956 202.266Z" fill="#FFB7B7"/>
       <path d="M31.0168 200.756L40.1143 200.756H40.1147C41.6522 200.756 43.1268 201.368 44.214 202.456C45.3013 203.545 45.9121 205.021 45.9122 206.561V206.75L31.0171 206.75L31.0168 200.756Z" fill="#2F2E41"/>
       <path d="M50.1588 65.6574C55.6902 65.6574 60.1743 61.1673 60.1743 55.6285C60.1743 50.0897 55.6902 45.5996 50.1588 45.5996C44.6274 45.5996 40.1433 50.0897 40.1433 55.6285C40.1433 61.1673 44.6274 65.6574 50.1588 65.6574Z" fill="#FFB8B8"/>
@@ -131,6 +131,12 @@
         <div th:each="question : ${questions}">
           <div class="formbold-input-group">
             <label th:text="${question.text}" class="formbold-form-label"></label>
+
+            <!-- Image display -->
+            <div th:if="${!#strings.isEmpty(question.imageUrl)}" class="img-display-container">
+              <img th:src="${question.imageUrl}" class="img-display" />
+            </div>
+
 
             <!-- Text question -->
             <input 
@@ -352,6 +358,7 @@
     margin-top: 10px;
   }
 
+  /* Button style (apply on submit button) */
   .formbold-btn {
     display: flex;
     align-items: center;
@@ -367,6 +374,12 @@
     color: white;
     cursor: pointer;
     margin-top: 25px;
+  }
+  .formbold-btn:hover {
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+  }
+  .formbold-btn:disabled {
+    cursor: not-allowed;
   }
   
 
@@ -410,11 +423,6 @@
     width: 80%;
   }
 
-  .formbold-btn:hover {
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
-  }
-
-
 
   /* Spinner for submit button */
   .spinner {
@@ -435,6 +443,17 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  /* Image display for question */
+  .img-display-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 20px;
+  }
+  .img-display {
+    width: 90%;
+    height: auto;
   }
 
 
@@ -464,10 +483,13 @@
     var button = this.querySelector('.formbold-btn');
     var spinner = button.querySelector('.loadingSpinner');
     var buttonText = button.querySelector('.button-text');
+    // 显示加载动画，隐藏按钮文本
     spinner.style.display = 'flex';
     buttonText.style.display = 'none';
+    // 禁用按钮防止重复点击
+    button.disabled = true;
   });
-
+  
   // 监听 pageshow 事件来处理浏览器的前进和后退操作
   window.addEventListener('pageshow', function(event) {
     var button = document.querySelector('.formbold-btn');
@@ -477,6 +499,8 @@
       // 重置按钮状态，显示文本，隐藏旋转圆圈
       spinner.style.display = 'none';
       buttonText.style.display = 'inline'; // 或者是 'block', 取决于你的布局
+      // 恢复按钮的可点击状态
+      button.disabled = false;
     }
   });
 </script>

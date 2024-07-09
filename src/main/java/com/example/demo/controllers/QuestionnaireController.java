@@ -40,7 +40,7 @@ public class QuestionnaireController {
     , Long scaleId, @RequestParam(required = true) String accountId
     , @RequestParam(required = true) AnswerRecord answerRecord, String error) {
 
-        ModelAndView modelAndView = new ModelAndView("temp_page_first");
+        ModelAndView modelAndView = new ModelAndView("Form");
 
         // Add type, page, scale to the model
         Scale scale = scaleRepository.findById(scaleId).orElse(null);

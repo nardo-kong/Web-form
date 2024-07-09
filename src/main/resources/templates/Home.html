@@ -136,8 +136,12 @@
     .formbold-btn:hover {
       box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
     }
+    .formbold-btn:disabled {
+      cursor: not-allowed;
+    }
 
-
+    
+    /* Spinner for submit button */
     .spinner {
       width: 18.667px;
       height: 18.667px;
@@ -212,8 +216,11 @@
       var button = this.querySelector('.formbold-btn');
       var spinner = button.querySelector('.loadingSpinner');
       var buttonText = button.querySelector('.button-text');
+      // 显示加载动画，隐藏按钮文本
       spinner.style.display = 'flex';
       buttonText.style.display = 'none';
+      // 禁用按钮防止重复点击
+      button.disabled = true;
     });
 
     // 监听 pageshow 事件来处理浏览器的前进和后退操作
@@ -225,6 +232,8 @@
         // 重置按钮状态，显示文本，隐藏旋转圆圈
         spinner.style.display = 'none';
         buttonText.style.display = 'inline'; // 或者是 'block', 取决于你的布局
+        // 恢复按钮的可点击状态
+        button.disabled = false;
       }
     });
   </script>

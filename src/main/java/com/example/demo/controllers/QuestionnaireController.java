@@ -45,7 +45,18 @@ public class QuestionnaireController {
         // Add type, page, scale to the model
         Scale scale = scaleRepository.findById(scaleId).orElse(null);
         int totalPage = scale.getTotalPage();
-        addModelAttributes(modelAndView, group_type, page, totalPage, scaleId, accountId, answerRecord, error);
+        
+        String bgColor;
+        String music;
+        if (group_type == 0) {
+            bgColor = scale.getCGroupBgColor();
+            music = scale.getCGroupMusic();
+        } else {
+            bgColor = scale.getEGroupBgColor();
+            music = scale.getEGroupMusic();
+        }
+            
+        addModelAttributes(modelAndView, group_type, bgColor, music, page, totalPage, scaleId, accountId, answerRecord, error);
 
         // Get questions from the database and add to the model
         List<Question> questions = questionRepository.findByScaleAndPage(scale, page);
@@ -56,7 +67,7 @@ public class QuestionnaireController {
 
     @PostMapping("/next_page")
     public String submitAnswers(@RequestParam Map<String, String> answers, @RequestParam(required = true) Long answerRecordId
-            , @RequestParam String group_type, @RequestParam int page, @RequestParam Long scaleId
+            , @RequestParam int group_type, @RequestParam int page, @RequestParam Long scaleId
             , @RequestParam String accountId, RedirectAttributes redirectAttributes) {
 
 
@@ -96,6 +107,7 @@ public class QuestionnaireController {
         // Redirect to the next page
         Scale scale = scaleRepository.findById(scaleId).orElse(null);
         int totalPage = scale.getTotalPage();
+
         if (page == totalPage) {
             answerService.completeAnswerRecord(answerRecord);
             return "Home";
@@ -108,9 +120,11 @@ public class QuestionnaireController {
     }
 
     // Some method
-    private void addModelAttributes(ModelAndView modelAndView, int group_type, int page, int totalPage, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
+    private void addModelAttributes(ModelAndView modelAndView, int group_type, String bgColor, String music, int page, int totalPage, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
         String scaleName = scaleRepository.findById(scaleId).orElse(null).getTitle();
         modelAndView.addObject("group_type", group_type);
+        modelAndView.addObject("bgColor", bgColor);
+        modelAndView.addObject("music", music);
         modelAndView.addObject("page", page);
         modelAndView.addObject("totalPage", totalPage);
         modelAndView.addObject("scaleId", scaleId);
@@ -122,7 +136,7 @@ public class QuestionnaireController {
         }
     }
 
-    private void addRedirectAttributes(RedirectAttributes redirectAttributes, int page, String group_type, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
+    private void addRedirectAttributes(RedirectAttributes redirectAttributes, int page, int group_type, Long scaleId, String accountId, AnswerRecord answerRecord, String error) {
         String scaleName = scaleRepository.findById(scaleId).orElse(null).getTitle();
         redirectAttributes.addAttribute("page", page);
         redirectAttributes.addAttribute("group_type", group_type);

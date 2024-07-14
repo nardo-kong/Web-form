@@ -23,6 +23,14 @@ public class Scale {
 
     private Long previousId;
 
+    private String eGroupBgColor;
+
+    private String cGroupBgColor;
+
+    private String eGroupMusic;
+
+    private String cGroupMusic; 
+
     @OneToMany(mappedBy = "scale")
     private List<Question> questions;
 
@@ -53,6 +61,22 @@ public class Scale {
 
     public Long getPreviousId() {
         return previousId;
+    }
+
+    public String getEGroupBgColor() {
+        return eGroupBgColor;
+    }
+
+    public String getCGroupBgColor() {
+        return cGroupBgColor;
+    }
+
+    public String getEGroupMusic() {
+        return eGroupMusic;
+    }
+
+    public String getCGroupMusic() {
+        return cGroupMusic;
     }
     
 }

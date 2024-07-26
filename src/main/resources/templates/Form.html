@@ -7,17 +7,10 @@
 </head>
 <body th:style="'background-color:' + (${bgColor} != null ? ${bgColor} : '#E6E6FA')">
 
-  <div id="myModal" class="modal" th:style="${music} != null ? 'display: block;' : 'display: none;'">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <p>音乐将会播放，点击确认开始。</p>
-      <button id="confirmBtn">确认</button>
-    </div>
-  </div>
-
-  <audio controls autoplay loop th:src="${music}" style="display: none;">
-    Your browser does not support the audio element.
+  <audio id="musicPlayer" controls loop th:src="${music}" style="display: none;">
+      Your browser does not support the audio element.
   </audio>
+  <input type="hidden" id="music" th:value="${music}"/>
 
 
   <!-- error -->
@@ -522,6 +515,18 @@
 </style>
 
 <script>
+  var music = document.getElementById('music').value;
+  var page = document.getElementsByName('page')[0].value;
+
+  if (music && page == 1) {
+    if (confirm("This form has background music, please check your volume settings.")) {
+      var musicPlayer = document.getElementById('musicPlayer');
+      musicPlayer.play();
+    }
+  }
+</script>
+
+<script>
   document.getElementById('myForm').addEventListener('submit', function(event) {
     var button = this.querySelector('.formbold-btn');
     var spinner = button.querySelector('.loadingSpinner');
@@ -545,10 +550,6 @@
       // 恢复按钮的可点击状态
       button.disabled = false;
     }
-  });
-  document.getElementById('confirmBtn').addEventListener('click', function() {
-    document.getElementById('myModal').style.display = 'none';
-    document.getElementById('myAudio').play();
   });
 </script>
 
